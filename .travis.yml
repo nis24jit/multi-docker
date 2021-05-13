@@ -7,15 +7,14 @@ services:
 before_install:
   - docker build -t dockerhound/react-test -f ./client/Dockerfile.dev ./client
 
-
 script:
-  - docker run dockerhound/react-test npm test
+  - docker run dockerhound/react-test npm test -- --coverage
 
 after_success:
-  - docker build -t dockerhound/multi-client  ./client
-  - docker build -t dockerhound/multi-nginx  ./nginx
-  - docker build -t dockerhound/multi-server  ./server
-  - docker build -t dockerhound/multi-worker  ./worker
+  - docker build -t dockerhound/multi-client ./client
+  - docker build -t dockerhound/multi-nginx ./nginx
+  - docker build -t dockerhound/multi-server ./server
+  - docker build -t dockerhound/multi-worker ./worker
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
@@ -23,7 +22,6 @@ after_success:
   - docker push dockerhound/multi-nginx
   - docker push dockerhound/multi-server
   - docker push dockerhound/multi-worker
-
 
 deploy:
   provider: elasticbeanstalk
