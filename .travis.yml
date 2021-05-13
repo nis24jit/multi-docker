@@ -9,7 +9,7 @@ before_install:
 
 
 script:
-  - docker run dockerhound/react-test npm test -- --coverage
+  - docker run dockerhound/react-test npm test
 
 after_success:
   - docker build -t dockerhound/multi-client  ./client
@@ -17,7 +17,7 @@ after_success:
   - docker build -t dockerhound/multi-server  ./server
   - docker build -t dockerhound/multi-worker  ./worker
   # Log in to the docker CLI
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin docker.io
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
   - docker push dockerhound/multi-client
   - docker push dockerhound/multi-nginx
